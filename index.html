@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Drink Ordering</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="app">
+  <label> Editing:
+    <input v-model="editing" type="checkbox" />
+  </label>
+  <div class="Control_Panel" :class="{showMode: ! editing}">
+    <h2>Control Panel</h2>
+    <h3>價格設定與是否完售編輯</h3>
+    <label>
+      基礎價格
+      <input type="text" v-model.number.lazy="basePrice"/>
+      服務費
+      <input type="text" v-model.number.lazy="serviceFee" />
+    </label>
+    <div v-for="(card, cid) in cards">
+      <label>
+        {{cid}}
+        <input type="checkbox" v-model="card.soldOut"/>
+        {{card.title}}
+        <input type="text" placeholder="輸入商品價格" v-model.number.lazy="card.price" />
+      </label>
+    </div>
+    <div class="bar"></div>
+    <div class="search">
+      <label>
+        搜尋相關：
+        <br>
+        最小價錢
+        <input type="text" v-model.number.lazy="lowest_price"/>
+        最大價錢
+        <input type="text" v-model.number.lazy="highest_price"/>
+        關鍵字
+        <input type="text" v-model="key_word"/>
+      </label>
+      
+    </div>
+    
+    
+  </div>
+  <!-- v-if="((card.price + basePrice) >= lowest_price) && ((card.price + basePrice) <= highest_price)" -->
+  <div class="menu">
+    <div class="cards">
+      <div class="card" v-for="card in cards" v-if="card.title.includes(key_word)">
+        <div v-if="((card.price + basePrice) >= lowest_price) && ((card.price + basePrice) <= highest_price)">
+          <img class="cover" :src="card.cover">
+          <div class="info">
+            <h3>{{card.title}} 
+              <div class="soldOut" v-if="card.soldOut">已售完</div>
+            </h3>
+            <div class="price">{{card.price + basePrice}}$>
+            <div class="other">(+{{ serviceFee}}%服務費)</div>            
+            </div>
+          </div>
+        </div>        
+      </div>
+        
+    </div>
+  </div>
+<!-- partial -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.33/vue.cjs.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>
